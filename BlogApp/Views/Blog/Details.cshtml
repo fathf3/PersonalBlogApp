@@ -1,0 +1,239 @@
+@model BlogApp.Models.BlogPost
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<BlogApp.Models.Author> UserManager
+@using BlogApp.Helpers
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container">
+    <article class="blog-post my-4">
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-4">@Model.Title</h1>
+
+            <div class="d-flex justify-content-center gap-2 mb-4">
+                @foreach (var tag in Model.Tags)
+                {
+                    <a asp-action="Index" asp-route-tag="@tag.Name" class="badge text-decoration-none bg-secondary">
+                        @tag.Name
+                    </a>
+                }
+            </div>
+
+            <div class="text-muted d-flex justify-content-center align-items-center gap-4">
+                <div>
+                    <i class="fas fa-user me-2"></i>
+                    <span>@Model.Author.FullName</span>
+                </div>
+                <div>
+                    <i class="fas fa-calendar me-2"></i>
+                    <span>@Model.CreatedDate.ToString("MMM d, yyyy")</span>
+                </div>
+            </div>
+        </div>
+        @if (User.Identity.IsAuthenticated && Model.Author.Id == (await UserManager.GetUserAsync(User))?.Id)
+        {
+            <div class="d-flex gap-2 mb-4">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>
+                    Edit Post
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                    <i class="fas fa-trash me-2"></i>
+                    Delete Post
+                </a>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(Model.HeaderImage))
+        {
+            <div class="text-center mb-4">
+                <img src="@Model.HeaderImage" alt="@Model.Title" class="img-fluid rounded header-image" />
+            </div>
+        }
+
+        <div class="blog-content markdown-body">
+            @Html.MarkdownToHtml(Model.Content)
+        </div>
+
+        <div class="mt-5 pt-4 border-top">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Back to List
+                    </a>
+
+                </div>
+                <div class="text-muted">
+                    @Model.CreatedDate.ToString("MMMM d, yyyy")
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<style>
+    .blog-content {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .blog-content h1,
+    .blog-content h2,
+    .blog-content h3,
+    .blog-content h4,
+    .blog-content h5,
+    .blog-content h6 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .blog-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .blog-content h2 {
+        font-size: 2rem;
+    }
+
+    .blog-content h3 {
+        font-size: 1.75rem;
+    }
+
+    .blog-content h4 {
+        font-size: 1.5rem;
+    }
+
+    .blog-content h5 {
+        font-size: 1.25rem;
+    }
+
+    .blog-content h6 {
+        font-size: 1.1rem;
+    }
+
+    .blog-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .blog-content ul,
+    .blog-content ol {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .blog-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-content pre {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        border-radius: 8px;
+        background-color: var(--nav-bg) !important;
+        border: 1px solid var(--border-color);
+        overflow-x: auto;
+    }
+
+    .blog-content code {
+        font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+        font-size: 0.9em;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        background-color: var(--nav-bg);
+        color: var(--text-color);
+    }
+
+    .blog-content pre code {
+        padding: 0;
+        background-color: transparent;
+    }
+
+    .blog-content blockquote {
+        margin: 2rem 0;
+        padding: 1rem 1.5rem;
+        border-left: 4px solid var(--border-color);
+        background-color: var(--nav-bg);
+        font-style: italic;
+    }
+
+    .blog-content img {
+        max-width: 100%;
+        height: auto;
+        margin: 2rem auto;
+        display: block;
+        border-radius: 8px;
+    }
+
+    .blog-content a {
+        color: #0066cc;
+        text-decoration: none;
+    }
+
+    .blog-content a:hover {
+        text-decoration: underline;
+    }
+
+    .blog-content hr {
+        margin: 2rem 0;
+        border: 0;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .blog-content table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: collapse;
+    }
+
+    .blog-content th,
+    .blog-content td {
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .blog-content th {
+        background-color: var(--nav-bg);
+        font-weight: 600;
+    }
+
+    .header-image {
+        max-height: 400px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.4em 0.8em;
+        border-radius: 4px;
+    }
+
+    .blog-post {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .display-4 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>

@@ -1,0 +1,173 @@
+@model IEnumerable<BlogApp.Models.BlogPost>
+
+@{
+    ViewData["Title"] = ViewBag.CurrentTag != null ? $" {ViewBag.CurrentTag}" : "Tutorials";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">
+            @if (ViewBag.CurrentTag != null)
+            {
+                <text>Tutorials - @ViewBag.CurrentTag (@Model.Count())</text>
+            }
+            else if (ViewBag.SearchTerm != null)
+            {
+                <text>Search Results for "@ViewBag.SearchTerm" (@Model.Count())</text>
+            }
+            else
+            {
+                <text>Yazılar (@Model.Count())</text>
+            }
+        </h1>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>
+                Create New Post
+            </a>
+        }
+    </div>
+
+    <div class="mb-4">
+        <form method="get" asp-action="Index" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control search-input"
+                    placeholder="Yazı, etiket veya başlık" value="@ViewBag.Search">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Henüz bir yazı paylaşılmamış.
+        </div>
+    }
+
+    <div class="row g-4">
+        @foreach (var post in Model)
+        {
+            <div class="col-12">
+                <div class="post-item">
+                    <div class="d-flex gap-1 mb-2">
+                        @foreach (var tag in post.Tags)
+                        {
+                            <a asp-action="Index" asp-route-tag="@tag.Name"
+                                class="badge text-decoration-none @(ViewBag.CurrentTag == tag.Name ? "bg-primary" : "bg-secondary")">
+                                @tag.Name
+                            </a>
+                        }
+                    </div>
+                    <h2 class="post-title mb-2">
+                        <a asp-action="Details" asp-route-id="@post.Id" asp-route-slug="@post.Slug"
+                            class="text-decoration-none">
+                            @post.Title
+                        </a>
+                    </h2>
+                    <p class="post-summary mb-2">@post.Summary</p>
+                    <div class="post-meta text-muted">
+                        <span class="me-3">
+                            <i class="fas fa-user me-1"></i>
+                            @post.Author.FullName
+                        </span>
+                        <span>
+                            <i class="fas fa-calendar me-1"></i>
+                            @post.CreatedDate.ToString("MMM d, yyyy")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .post-item {
+        padding: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: var(--nav-bg);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .post-item:hover {
+        transform: translateY(-2px);
+    }
+
+    .post-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .post-title a {
+        color: var(--text-color);
+    }
+
+    .post-title a:hover {
+        color: var(--text-color);
+        opacity: 0.8;
+        text-decoration: none !important;
+    }
+
+    .post-summary {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .post-meta {
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.4em 0.8em;
+        border-radius: 4px;
+        text-transform: lowercase;
+    }
+
+    .bg-secondary {
+        background-color: #404040 !important;
+    }
+
+    .bg-primary {
+        background-color: #0066cc !important;
+    }
+
+    .badge:hover {
+        opacity: 0.9;
+    }
+
+    .search-input {
+        background-color: var(--nav-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+    }
+
+    .search-input:focus {
+        background-color: var(--nav-bg);
+        border-color: #0066cc;
+        color: var(--text-color);
+        box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+    }
+
+    .search-input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .alert-info {
+        background-color: var(--nav-bg);
+        border-color: var(--border-color);
+        color: var(--text-color);
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+    }
+</style>

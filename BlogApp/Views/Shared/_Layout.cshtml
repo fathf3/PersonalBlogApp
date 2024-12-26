@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags -->
+    <title>@ViewData["Title"] - Fatih Mutlu | Blog</title>
+    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="author" content="Fatih Mutlu" />
+
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="@ViewData["Title"] - Fatih Mutlu | Blog" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:type" content="@ViewData["OgType"]" />
+    <meta property="og:url" content="@Context.Request.Scheme://@Context.Request.Host@Context.Request.Path" />
+    <meta property="og:image" content="@ViewData["OgImage"]" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@ViewData["Title"] - Fatih Mutlu | Blog" />
+    <meta name="twitter:description" content="@ViewData["Description"]" />
+    <meta name="twitter:image" content="@ViewData["OgImage"]" />
+    <link rel="shortcut icon" href="~/img/logo.png">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="@Context.Request.Scheme://@Context.Request.Host@Context.Request.Path" />
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/feed.xml" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root[data-theme="dark"] {
+            --bg-color: #2d2d2d;
+            --nav-bg: #1c1c1c;
+            --text-color: #ffffff;
+            --text-muted: #b0b0b0;
+            --border-color: #404040;
+        }
+
+        :root[data-theme="light"] {
+            --bg-color: #ffffff;
+            --nav-bg: #f8f9fa;
+            --text-color: #000000;
+            --text-muted: #6c757d;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+
+        .navbar {
+            background-color: var(--nav-bg) !important;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color) !important;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            color: var(--text-muted) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+        }
+
+        .nav-link:hover {
+            color: var(--text-color) !important;
+        }
+
+        .nav-link.active {
+            color: var(--text-color) !important;
+        }
+
+        .card {
+            background-color: var(--nav-bg);
+            border: none;
+            border-radius: 8px;
+        }
+
+        .card-title {
+            color: var(--text-color);
+            font-size: 1.2rem;
+        }
+
+        .card-text {
+            color: var(--text-muted);
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .btn-primary {
+            background-color: #0066cc;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3;
+        }
+
+        .footer {
+            background-color: var(--bg-color);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .theme-switch {
+            width: 48px;
+            height: 24px;
+            background-color: var(--border-color);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            right: 2px;
+            transition: all 0.3s;
+        }
+
+        :root[data-theme="light"] .theme-switch::after {
+            right: 26px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Blog" asp-action="Index">
+                    <i class="fas fa-laugh-wink"></i>
+                    <span>Fatih Mutlu | Blog</span>
+                </a>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-controller="Blog" asp-action="Index">Yazılar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Resume" asp-action="Index">CV</a>
+                    </li>
+
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-link nav-link">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                    }
+                    <div class="theme-switch" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer text-muted mt-4">
+        <div class="container py-3">
+            &copy; @DateTime.Now.Year - Blog
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Sayfa yüklendiğinde kaydedilmiş temayı uygula
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

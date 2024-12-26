@@ -1,0 +1,256 @@
+@model BlogApp.Models.Resume
+
+@{
+    ViewData["Title"] = "Resume";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Profile Section -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImage))
+                    {
+                        <img src="@Model.ProfileImage" alt="@Model.FullName" class="rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="rounded-circle bg-secondary mb-3 mx-auto d-flex align-items-center justify-content-center"
+                            style="width: 150px; height: 150px;">
+                            <i class="fas fa-user fa-4x text-white"></i>
+                        </div>
+                    }
+                    <h2 class="h4 mb-2">@Model.FullName</h2>
+                    <p class="text-muted mb-3">@Model.Title</p>
+                    <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>@Model.Location</p>
+                    <p class="mb-2"><i class="fas fa-envelope me-2"></i>@Model.Email</p>
+                    @if (!string.IsNullOrEmpty(Model.Phone))
+                    {
+                        <p class="mb-2"><i class="fas fa-phone me-2"></i>@Model.Phone</p>
+                    }
+                    <div class="mt-3">
+                        @if (!string.IsNullOrEmpty(Model.Website))
+                        {
+                            <a href="@Model.Website" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                <i class="fas fa-globe me-1"></i>Website
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.LinkedIn))
+                        {
+                            <a href="@Model.LinkedIn" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                <i class="fab fa-linkedin me-1"></i>LinkedIn
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.GitHub))
+                        {
+                            <a href="@Model.GitHub" class="btn btn-outline-primary btn-sm" target="_blank">
+                                <i class="fab fa-github me-1"></i>GitHub
+                            </a>
+                        }
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <hr>
+                        <a href="/Resume/Edit" class="btn btn-outline-primary btn-sm">Edit Resume</a>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="col-md-8">
+            <!-- Summary Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Hakkımda</h3>
+                    <p class="mb-0">@Model.Summary</p>
+                </div>
+            </div>
+
+            <!-- Work Experience Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">İş Deneyimleri</h3>
+                    @foreach (var experience in Model.WorkExperiences.OrderByDescending(e => e.StartDate))
+                    {
+                        <div class="mb-4">
+                            <h4 class="h6 mb-1">@experience.Position - @experience.CompanyName</h4>
+                            <p class="text-muted mb-2">
+                                @experience.StartDate.ToString("MMM yyyy") - @(experience.EndDate.HasValue ?
+                            experience.EndDate.Value.ToString("MMM yyyy") : "Present")
+                                @if (!string.IsNullOrEmpty(experience.Location))
+                                {
+                                    <span>• @experience.Location</span>
+                                }
+                            </p>
+                            <p class="mb-0">@experience.Description</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Eğitim</h3>
+                    @foreach (var education in Model.Education.OrderByDescending(e => e.StartDate))
+                    {
+                        <div class="mb-4">
+                            <h4 class="h6 mb-1">@education.FieldOfStudy</h4>
+                            <p class="text-muted mb-2">
+                                @education.InstitutionName
+
+                            </p>
+                            <p class="text-muted mb-2">
+                                @education.StartDate.ToString("MMM yyyy") - @(education.EndDate.HasValue ?
+                            education.EndDate.Value.ToString("MMM yyyy") : "Present")
+                            </p>
+
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Skills Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Yetenekler</h3>
+                    @foreach (var category in Model.Skills.GroupBy(s => s.Category).OrderBy(g => g.Key))
+                    {
+
+                        @foreach (var skill in category.OrderByDescending(s => s.ProficiencyLevel))
+                        {
+                            <h1 class="badge bg-primary">@skill.Name</h1>
+
+                            <div class="progress" style="width: 200px; height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                    style="width: @(skill.ProficiencyLevel * 25)%;"
+                                    aria-valuenow="@(skill.ProficiencyLevel * 25)" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                            <hr>
+                        }
+                    }
+
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Projeler</h3>
+                    @foreach (var project in Model.Projects.OrderByDescending(p => p.StartDate))
+                    {
+                        <div class="mb-4">
+                            <h4 class="h6 mb-1">
+                                @project.Name
+                                @if (!string.IsNullOrEmpty(project.ProjectUrl))
+                                {
+                                    <a href="@project.ProjectUrl" class="ms-2" target="_blank"><i
+                                            class="fas fa-external-link-alt"></i></a>
+                                }
+                                @if (!string.IsNullOrEmpty(project.GitHubUrl))
+                                {
+                                    <a href="@project.GitHubUrl" class="ms-2" target="_blank"><i class="fab fa-github"></i></a>
+                                }
+                            </h4>
+                            @if (project.StartDate.HasValue)
+                            {
+                                <p class="text-muted mb-2">
+                                    @project.StartDate.Value.ToString("MMM yyyy") - @(project.EndDate.HasValue ?
+                            project.EndDate.Value.ToString("MMM yyyy") : "Present")
+                                </p>
+                            }
+                            <p class="mb-2">@project.Description</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var tech in project.Technologies.Split(',',
+                               StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    <span class="badge bg-secondary">@tech.Trim()</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Certificates Section -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Sertifikalar</h3>
+                    @foreach (var certificate in Model.Certificates.OrderByDescending(c => c.IssueDate))
+                    {
+                        <div class="mb-4">
+                            <h4 class="h6 mb-1">
+                                @certificate.Name
+                                @if (!string.IsNullOrEmpty(certificate.CredentialUrl))
+                                {
+                                    <a href="@certificate.CredentialUrl" class="ms-2" target="_blank"><i
+                                            class="fas fa-external-link-alt"></i></a>
+                                }
+                            </h4>
+                            <p class="text-muted mb-2">
+                                @certificate.IssuingOrganization
+
+                            </p>
+                            <p class="text-muted mb-0">
+                                Tarih : @certificate.IssueDate.ToString("MMM yyyy")
+                                @if (certificate.ExpiryDate.HasValue)
+                                {
+                                    <span>• Expires @certificate.ExpiryDate.Value.ToString("MMM yyyy")</span>
+                                }
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: var(--nav-bg);
+        border: 1px solid var(--border-color);
+    }
+
+    .text-muted {
+        color: var(--text-muted) !important;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .badge.bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .badge.bg-secondary {
+        background-color: var(--secondary-color) !important;
+    }
+
+    a {
+        color: var(--link-color);
+    }
+
+    a:hover {
+        color: var(--link-hover-color);
+    }
+
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-outline-primary:hover {
+        color: var(--bg-color);
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+</style>
