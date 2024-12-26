@@ -2,6 +2,8 @@
 
 Modern bir blog ve CV yönetim sistemi. ASP.NET Core 8.0 kullanılarak geliştirilmiş, kişisel blog yazıları paylaşmanıza ve profesyonel CV'nizi yönetmenize olanak sağlayan bir web uygulaması.
 
+Link : http://fatihmutlu.runasp.net/
+
 ## 🚀 Özellikler
 
 ### Blog Özellikleri
