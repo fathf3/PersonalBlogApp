@@ -42,7 +42,7 @@ Modern bir blog ve CV yönetim sistemi. ASP.NET Core 7.0 kullanılarak geliştir
 
 1. Repoyu klonlayın:
 ```bash
-git clone https://github.com/yourusername/BlogApp.git
+git clone https://github.com/fathf3/BlogApp.git
 ```
 
 2. Veritabanını oluşturun:
@@ -86,9 +86,9 @@ Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICEN
 
 ## 📞 İletişim
 
-Fatih Mutlu - [@yourusername](https://twitter.com/yourusername)
+Fatih Mutlu 
 
-Proje Linki: [https://github.com/yourusername/BlogApp](https://github.com/yourusername/BlogApp)
+Proje Linki: [https://github.com/yourusername/BlogApp](https://github.com/fathf3/BlogApp)
 
 ## 🙏 Teşekkürler
 
