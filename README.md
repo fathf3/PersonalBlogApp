@@ -1,6 +1,6 @@
 # Blog & CV Uygulaması
 
-Modern bir blog ve CV yönetim sistemi. ASP.NET Core 7.0 kullanılarak geliştirilmiş, kişisel blog yazıları paylaşmanıza ve profesyonel CV'nizi yönetmenize olanak sağlayan bir web uygulaması.
+Modern bir blog ve CV yönetim sistemi. ASP.NET Core 8.0 kullanılarak geliştirilmiş, kişisel blog yazıları paylaşmanıza ve profesyonel CV'nizi yönetmenize olanak sağlayan bir web uygulaması.
 
 ## 🚀 Özellikler
 
@@ -88,7 +88,7 @@ Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICEN
 
 Fatih Mutlu 
 
-Proje Linki: [https://github.com/yourusername/BlogApp](https://github.com/fathf3/BlogApp)
+Proje Linki: [https://github.com/fathf3/BlogApp](https://github.com/fathf3/BlogApp)
 
 ## 🙏 Teşekkürler
 
