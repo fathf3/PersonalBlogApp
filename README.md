@@ -96,3 +96,10 @@ Proje Linki: [https://github.com/fathf3/BlogApp](https://github.com/fathf3/BlogA
 - [Bootstrap](https://getbootstrap.com)
 - [Font Awesome](https://fontawesome.com)
 - [jQuery](https://jquery.com) 
+## PROJE Görselleri 📷 
+<div align="center">  
+
+<a><img style="margin: 10px" src="https://i.hizliresim.com/jjazdd0.png" /></a>  
+<a><img style="margin: 10px" src="https://i.hizliresim.com/se9j5ww.png" /></a>  
+<a><img style="margin: 10px" src="https://i.hizliresim.com/o28khua.png" /></a>  
+</div>
